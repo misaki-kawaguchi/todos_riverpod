@@ -9,6 +9,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final addTodoKey = UniqueKey();
+  final newTodoController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,8 +18,18 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [
-            TodoTitle(),
+          children: [
+            const TodoTitle(),
+            TextField(
+              key: addTodoKey,
+              controller: newTodoController,
+              decoration: const InputDecoration(
+                labelText: 'What needs to be done?',
+              ),
+              onSubmitted: (value){
+                newTodoController.clear();
+              },
+            ),
           ],
         ),
       ),
