@@ -20,18 +20,28 @@ class TodoItem extends StatelessWidget {
         child: Container(
           decoration: const BoxDecoration(
             border: Border(
-              bottom: BorderSide(
+              left: BorderSide(
+                color: Color(0xFFEEEEEE),
+              ),
+              right: BorderSide(
+                color: Color(0xFFEEEEEE),
+              ),
+              top: BorderSide(
                 color: Color(0xFFEEEEEE),
               ),
             ),
           ),
-          child: ListTile(
-            onTap: () {},
-            leading: Checkbox(
-              value: true,
-              onChanged: (value) {},
-            ),
-            title: Text(description),
+          child: Column(
+            children: [
+              ListTile(
+                onTap: () {},
+                leading: Checkbox(
+                  value: true,
+                  onChanged: (value) {},
+                ),
+                title: Text(description),
+              ),
+            ],
           ),
         ),
       ),

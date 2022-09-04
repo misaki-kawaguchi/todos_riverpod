@@ -41,18 +41,30 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 42),
             const Toolbar(),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: todoList.length,
-              itemBuilder: (context, index) {
-                return Dismissible(
-                  key: ValueKey(todoList[index].id),
-                  onDismissed: (_) {},
-                  child: TodoItem(
-                    description: todoList[index].description,
+            Container(
+              decoration: todoList.isNotEmpty ? const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFEEEEEE),
                   ),
-                );
-              },
+                ),
+              ): BoxDecoration(
+                border: Border.all(color: Colors.white),
+              ),
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: todoList.length,
+                itemBuilder: (context, index) {
+                  return Dismissible(
+                    key: ValueKey(todoList[index].id),
+                    onDismissed: (_) {},
+                    child: TodoItem(
+                      description: todoList[index].description,
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
