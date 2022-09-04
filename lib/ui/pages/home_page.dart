@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todos_riverpod/ui/components/todo_title.dart';
+import 'package:todos_riverpod/ui/components/toolbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,6 +31,8 @@ class _HomePageState extends State<HomePage> {
                 newTodoController.clear();
               },
             ),
+            const SizedBox(height: 42),
+            const Toolbar(),
           ],
         ),
       ),
