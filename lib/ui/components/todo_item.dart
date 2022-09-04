@@ -39,8 +39,10 @@ class TodoItem extends HookConsumerWidget {
               ListTile(
                 onTap: () {},
                 leading: Checkbox(
-                  value: false,
-                  onChanged: (value) {},
+                  value: todo.completed,
+                  onChanged: (value) {
+                    ref.read(todoListProvider.notifier).toggle(todo.id);
+                  },
                 ),
                 title: Text(todo.description),
               ),
