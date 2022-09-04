@@ -38,4 +38,18 @@ class TodoListViewModel extends StateNotifier<List<Todo>> {
           todo,
     ];
   }
+
+  void edit({required String id, required String description}) {
+    state = [
+      for (final todo in state)
+        if (todo.id == id)
+          Todo(
+            id: todo.id,
+            description: description,
+            completed: todo.completed,
+          )
+        else
+          todo,
+    ];
+  }
 }
