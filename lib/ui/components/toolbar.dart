@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:todos_riverpod/providers/todoList_filter_provider.dart';
 
-class Toolbar extends StatelessWidget {
+class Toolbar extends HookConsumerWidget {
   const Toolbar({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final allFilterKey = UniqueKey();
     final activeFilterKey = UniqueKey();
     final completedFilterKey = UniqueKey();
 
+    final filter = ref.watch(todoListFilter);
+    Color? textColorFor(TodoListFilter value) {
+      return filter == value ? Colors.blue : Colors.black;
+    }
+
     return Material(
       child: Row(
         children: [
-          const Expanded(
+          Expanded(
             child: Text(
-              '1 items left',
+              '${ref.watch(uncompletedTodosCount)} items left',
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -22,10 +29,12 @@ class Toolbar extends StatelessWidget {
             key: allFilterKey,
             message: 'All todos',
             child: TextButton(
-              onPressed: (){},
+              onPressed: () =>
+              ref.read(todoListFilter.notifier).state = TodoListFilter.all,
               style: ButtonStyle(
                 visualDensity: VisualDensity.compact,
-                foregroundColor: MaterialStateProperty.all(Colors.blue)
+                foregroundColor:
+                MaterialStateProperty.all(textColorFor(TodoListFilter.all)),
               ),
               child: const Text('All'),
             ),
@@ -34,10 +43,13 @@ class Toolbar extends StatelessWidget {
             key: activeFilterKey,
             message: 'Only uncompleted todos',
             child: TextButton(
-              onPressed: (){},
+              onPressed: () => ref.read(todoListFilter.notifier).state =
+                  TodoListFilter.active,
               style: ButtonStyle(
-                  visualDensity: VisualDensity.compact,
-                  foregroundColor: MaterialStateProperty.all(Colors.black)
+                visualDensity: VisualDensity.compact,
+                foregroundColor: MaterialStateProperty.all(
+                  textColorFor(TodoListFilter.active),
+                ),
               ),
               child: const Text('Active'),
             ),
@@ -46,10 +58,13 @@ class Toolbar extends StatelessWidget {
             key: completedFilterKey,
             message: 'Only completed todos',
             child: TextButton(
-              onPressed: (){},
+              onPressed: () => ref.read(todoListFilter.notifier).state =
+                  TodoListFilter.completed,
               style: ButtonStyle(
-                  visualDensity: VisualDensity.compact,
-                  foregroundColor: MaterialStateProperty.all(Colors.black)
+                visualDensity: VisualDensity.compact,
+                foregroundColor: MaterialStateProperty.all(
+                  textColorFor(TodoListFilter.completed),
+                ),
               ),
               child: const Text('Completed'),
             ),

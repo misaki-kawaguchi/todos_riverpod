@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:todos_riverpod/providers/todolist_provider.dart';
 
-class TodoItem extends StatelessWidget {
+class TodoItem extends HookConsumerWidget {
   const TodoItem({
     Key? key,
     required this.description,
@@ -9,14 +12,26 @@ class TodoItem extends StatelessWidget {
   final String description;
 
   @override
-  Widget build(BuildContext context) {
-    final itemFocusNode = FocusNode();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final todo = ref.watch(currentTodoItem);
+    final itemFocusNode = useFocusNode();
+    final itemIsFocused = useIsFocused(itemFocusNode);
+    final textEditingController = useTextEditingController();
+    final textFieldFocusNode = useFocusNode();
 
     return Material(
       color: Colors.white,
       child: Focus(
         focusNode: itemFocusNode,
-        onFocusChange: (focused) {},
+        onFocusChange: (focused) {
+          if (focused) {
+            textEditingController.text = todo.description;
+          } else {
+            ref
+                .read(todoListProvider.notifier)
+                .edit(id: todo.id, description: textEditingController.text);
+          }
+        },
         child: Container(
           decoration: const BoxDecoration(
             border: Border(
@@ -34,12 +49,23 @@ class TodoItem extends StatelessWidget {
           child: Column(
             children: [
               ListTile(
-                onTap: () {},
+                onTap: () {
+                  itemFocusNode.requestFocus();
+                  textFieldFocusNode.requestFocus();
+                },
                 leading: Checkbox(
-                  value: true,
-                  onChanged: (value) {},
+                  value: todo.completed,
+                  onChanged: (value) {
+                    ref.read(todoListProvider.notifier).toggle(todo.id);
+                  },
                 ),
-                title: Text(description),
+                title: itemIsFocused
+                    ? TextField(
+                  autofocus: true,
+                  focusNode: textFieldFocusNode,
+                  controller: textEditingController,
+                )
+                    : Text(todo.description),
               ),
             ],
           ),
@@ -47,4 +73,19 @@ class TodoItem extends StatelessWidget {
       ),
     );
   }
+}
+
+bool useIsFocused(FocusNode node) {
+  final isFocused = useState(node.hasFocus);
+
+  useEffect(() {
+    void listener() {
+      isFocused.value = node.hasFocus;
+    }
+
+    node.addListener(listener);
+    return () => node.removeListener(listener);
+  }, [node]);
+
+  return isFocused.value;
 }
