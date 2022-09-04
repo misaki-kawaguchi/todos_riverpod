@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:todos_riverpod/providers/todolist_provider.dart';
 
-class Toolbar extends StatelessWidget {
+class Toolbar extends HookConsumerWidget {
   const Toolbar({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final allFilterKey = UniqueKey();
     final activeFilterKey = UniqueKey();
     final completedFilterKey = UniqueKey();
 
+    final uncompletedTodosCount = Provider<int>((ref) {
+      return ref.watch(todoListProvider).where((todo) => !todo.completed).length;
+    });
+
     return Material(
       child: Row(
         children: [
-          const Expanded(
+          Expanded(
             child: Text(
-              '1 items left',
+              '${ref.watch(uncompletedTodosCount)} items left',
               overflow: TextOverflow.ellipsis,
             ),
           ),
