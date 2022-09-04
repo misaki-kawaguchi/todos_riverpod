@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:todos_riverpod/providers/todoList_filter_provider.dart';
 import 'package:todos_riverpod/providers/todolist_provider.dart';
 import 'package:todos_riverpod/ui/components/todo_item.dart';
 import 'package:todos_riverpod/ui/components/todo_title.dart';
@@ -18,7 +19,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final todos = ref.watch(todoListProvider);
+    final todos = ref.watch(filteredTodos);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
