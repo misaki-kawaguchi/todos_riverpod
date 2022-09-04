@@ -16,6 +16,8 @@ dependencies:
   hooks_riverpod: ^1.0.3
   flutter_hooks: ^0.18.0
 
+  uuid: ^3.0.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

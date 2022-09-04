@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:todos_riverpod/providers/todolist_provider.dart';
 
-class TodoItem extends StatelessWidget {
+class TodoItem extends HookConsumerWidget {
   const TodoItem({
     Key? key,
     required this.description,
@@ -9,8 +11,9 @@ class TodoItem extends StatelessWidget {
   final String description;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final itemFocusNode = FocusNode();
+    final todo = ref.watch(currentTodoItem);
 
     return Material(
       color: Colors.white,
@@ -36,10 +39,10 @@ class TodoItem extends StatelessWidget {
               ListTile(
                 onTap: () {},
                 leading: Checkbox(
-                  value: true,
+                  value: false,
                   onChanged: (value) {},
                 ),
-                title: Text(description),
+                title: Text(todo.description),
               ),
             ],
           ),
