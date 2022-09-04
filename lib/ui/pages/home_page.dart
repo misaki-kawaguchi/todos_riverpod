@@ -58,7 +58,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                   itemBuilder: (context, index) {
                     return Dismissible(
                       key: ValueKey(todos[index].id),
-                      onDismissed: (_) {},
+                      onDismissed: (_) {
+                        ref.read(todoListProvider.notifier).remove(todos[index]);
+                      },
                       child: ProviderScope(
                         // 値をオーバーライド
                         overrides: [
